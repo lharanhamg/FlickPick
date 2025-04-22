@@ -19,7 +19,7 @@ obter_valor_minimo_ano(MinAno) :-
     ( atom_number(Input, MinAno),
       ( MinAno =:= 0 ; (MinAno >= 1980, MinAno =< 2024) )
     -> !
-    ; writeln('Ano inválido. Tente novamente.'), fail ).
+    ; writeln('[!]Ano inválido. Tente novamente.'), fail ).
 
 % Duração máxima ou sem restrição (0)
 obter_valor_maximo_duracao(MaxDur) :-
@@ -29,7 +29,7 @@ obter_valor_maximo_duracao(MaxDur) :-
     read_line_to_string(user_input, Input),
     ( atom_number(Input, MaxDur), MaxDur >= 0
     -> !
-    ; writeln('Duração inválida. Tente novamente.'), fail ).
+    ; writeln('[!]Duração inválida. Tente novamente.'), fail ).
 
 % Gêneros (lista separada por vírgula) ou sem restrição (0)
 obter_valor_genero(Genres) :-
@@ -44,7 +44,7 @@ obter_valor_genero(Genres) :-
       maplist(validar_genero, List),
       Genres = List
     -> !
-    ; writeln('Entrada inválida. Use apenas letras, dígitos e vírgulas.'), fail
+    ; writeln('[!]Entrada inválida. Use apenas letras, dígitos e vírgulas.'), fail
     ).
 
 % Rating mínimo ou sem restrição (0)
@@ -55,7 +55,7 @@ obter_valor_rating_imdb(MinRat) :-
     read_line_to_string(user_input, Input),
     ( atom_number(Input, MinRat), MinRat >= 0, MinRat =< 10
     -> !
-    ; writeln('Rating inválido. Tente novamente.'), fail ).
+    ; writeln('[!]Rating inválido. Tente novamente.'), fail ).
 
 % Oscars mínimos ou sem restrição (0)
 obter_valor_minimo_oscars(MinOsc) :-
@@ -65,7 +65,7 @@ obter_valor_minimo_oscars(MinOsc) :-
     read_line_to_string(user_input, Input),
     ( atom_number(Input, MinOsc), MinOsc >= 0
     -> !
-    ; writeln('Número inválido. Tente novamente.'), fail ).
+    ; writeln('[!]Número inválido. Tente novamente.'), fail ).
 
 % Validação simples de string de gênero
 validar_genero(Gen) :-
@@ -124,6 +124,7 @@ exibir_index([M|Ms], I, N, Rem) :-
 
 % Menu pós-página
 menu(Fs, Page, Rem) :-
+    writeln('O que fazer agora?'),
     writeln('[1] - Mais filmes'),
     writeln('[2] - Nova busca'),
     writeln('[3] - Sair'),
@@ -131,13 +132,13 @@ menu(Fs, Page, Rem) :-
     read_line_to_string(user_input, Op),
     ( Op = "1" ->
         ( Rem = [] ->
-            writeln('Não há mais páginas.'),
+            writeln('[!]Não há mais páginas.'),
             menu(Fs, Page, Rem)
         ; P1 is Page + 1, loop_filmes(Fs, P1)
         )
     ; Op = "2" -> main
     ; Op = "3" -> writeln('Saindo...')
-    ; writeln('Opção inválida.'), menu(Fs, Page, Rem)
+    ; writeln('[!]Opção inválida.'), menu(Fs, Page, Rem)
     ).
 
 loop_filmes(Fs) :- loop_filmes(Fs, 0).
@@ -146,7 +147,7 @@ loop_filmes(Fs, Page) :-
     Offset is Page * Size,
     drop(Offset, Fs, ToShow),
     ( ToShow = [] ->
-        writeln('Não há mais filmes para este filtro.'), Rem = []
+        writeln('[!]Não há filmes para este filtro.'), Rem = []
     ; Start is Offset + 1,
       exibir_index(ToShow, Start, Size, Rem)
     ),
