@@ -215,6 +215,6 @@ listar_generos :-
         All),
     sort(All, Unique),
     writeln('Gêneros disponíveis no CSV:'),
-    forall(member(G, Unique), writeln(G)).
-
-% command: swipl -q -f recommender.pl
+    forall(member(G, Unique), writeln(G)),
+    length(Unique, Total),
+    format('Total de gêneros disponíveis: ~w~n', [Total]).
