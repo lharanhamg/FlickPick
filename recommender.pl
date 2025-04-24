@@ -153,9 +153,27 @@ loop_filmes(Fs, Page) :-
     ),
     menu(Fs, Page, Rem).
 
-% -------------------- Ponto de Entrada --------------------
+% -------------------- Menu Inicial --------------------
+initial_menu :-
+    writeln('Bem-vindo ao Movie Finder!'),
+    writeln('Escolha uma opção:'),
+    writeln('[1] - Nova busca'),
+    writeln('[2] - Listar gêneros disponíveis'),
+    writeln('[3] - Sair'),
+    write('> '), flush_output,
+    read_line_to_string(user_input, Op),
+    initial_menu_option(Op).
 
+initial_menu_option("1") :- main_search.
+initial_menu_option("2") :- listar_generos, initial_menu.
+initial_menu_option("3") :- writeln('Saindo...').
+initial_menu_option(_)   :- writeln('[!]Opção inválida.'), initial_menu.
+
+% -------------------- Ponto de Entrada --------------------
 main :-
+    initial_menu.
+
+main_search :-
     carregar_filmes(Fs),
     obter_valor_minimo_ano(A),
     obter_valor_maximo_duracao(D),
