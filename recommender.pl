@@ -31,20 +31,37 @@ obter_valor_maximo_duracao(MaxDur) :-
     -> !
     ; writeln('[!]Duração inválida. Tente novamente.'), fail ).
 
-% Gêneros (lista separada por vírgula) ou sem restrição (0)
+% Predicado auxiliar para verificar se a string contém apenas zeros
+all_zeros(S) :-
+    string_chars(S, Chars),
+    Chars \= [],
+    forall(member(C, Chars), C = '0').
+
+% Gêneros (lista separada por vírgula) ou sem restrição (apenas 0 ou múltiplos zeros)
 obter_valor_genero(Genres) :-
     repeat,
     writeln('Escolha um ou mais gêneros separados por vírgula (ex: Action,Comedy) ou 0 (sem restrição):'),
     write('> '), flush_output,
     read_line_to_string(user_input, Input),
-    ( Input == "0"
+    ( all_zeros(Input)
     -> Genres = []
     ; split_string(Input, ",", " ", List),
-      List \= [],
-      maplist(validar_genero, List),
-      Genres = List
-    -> !
-    ; writeln('[!]Entrada inválida. Use apenas letras, dígitos e vírgulas.'), fail
+      ( List == []
+      -> writeln('[!]Entrada inválida. Use apenas letras, dígitos e vírgulas.'), fail
+      ; maplist(validar_genero, List),
+        carregar_filmes(Fs),
+        findall(G,
+            ( member(movie(_,_,_,_,GenStr,_,_), Fs),
+              split_string(GenStr, ",", " ", L),
+              member(G, L)
+            ),
+            All),
+        sort(All, Unique),
+        ( forall(member(Gen, List), member(Gen, Unique))
+        -> Genres = List
+        ; writeln('[!]Gênero inexistente. Confira os gêneros disponíveis.'), fail
+        )
+      )
     ).
 
 % Rating mínimo ou sem restrição (0)
@@ -134,11 +151,13 @@ menu(Fs, Page, Rem) :-
         ( Rem = [] ->
             writeln('[!]Não há mais páginas.'),
             menu(Fs, Page, Rem)
-        ; P1 is Page + 1, loop_filmes(Fs, P1)
+        ; P1 is Page + 1,
+          loop_filmes(Fs, P1)
         )
-    ; Op = "2" -> main
+    ; Op = "2" -> main_search
     ; Op = "3" -> writeln('Saindo...')
-    ; writeln('[!]Opção inválida.'), menu(Fs, Page, Rem)
+    ; writeln('[!]Opção inválida.'),
+      menu(Fs, Page, Rem)
     ).
 
 loop_filmes(Fs) :- loop_filmes(Fs, 0).
@@ -197,3 +216,5 @@ listar_generos :-
     sort(All, Unique),
     writeln('Gêneros disponíveis no CSV:'),
     forall(member(G, Unique), writeln(G)).
+
+% command: swipl -q -f recommender.pl
