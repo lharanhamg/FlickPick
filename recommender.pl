@@ -2,7 +2,7 @@
 
 % -------------------- Carregamento do CSV --------------------
 carregar_filmes(Fs) :-
-    csv_read_file('movies.csv',
+    csv_read_file('data/movies.csv',
                   [ movie(id,title,year,duration,genre,rating_imdb,oscar)
                   | Fs
                   ],
