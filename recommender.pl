@@ -1,6 +1,14 @@
 :- use_module(library(csv)).
 
+% -------------------- Comentários sobre o funcionamento do código --------------------
+% Este código implementa um sistema de recomendação de filmes em Prolog, utilizando um arquivo CSV como base de dados.
+% Abaixo está uma explicação detalhada de cada seção do código:
+
 % -------------------- Carregamento do CSV --------------------
+% O predicado carregar_filmes/1 lê os dados do arquivo 'data/movies.csv' e os transforma em uma lista de termos Prolog.
+% Cada linha do CSV é convertida em um termo movie(id, title, year, duration, genre, rating_imdb, oscar).
+% A biblioteca csv é usada para facilitar a leitura e conversão dos dados.
+
 carregar_filmes(Fs) :-
     csv_read_file('data/movies.csv',
                   [ movie(id,title,year,duration,genre,rating_imdb,oscar)
@@ -9,6 +17,13 @@ carregar_filmes(Fs) :-
                   [ functor(movie), convert(true), strip(true) ]).
 
 % -------------------- Funções de Leitura de Filtros --------------------
+% Esta seção contém predicados que interagem com o usuário para coletar critérios de busca:
+% - obter_valor_minimo_ano/1: Solicita ao usuário um ano mínimo para os filmes (ou 0 para sem restrição).
+% - obter_valor_maximo_duracao/1: Solicita uma duração máxima em minutos (ou 0 para sem restrição).
+% - obter_valor_genero/1: Permite ao usuário escolher gêneros específicos ou sem restrição (0).
+% - obter_valor_rating_imdb/1: Solicita um rating mínimo do IMDb (ou 0 para sem restrição).
+% - obter_valor_minimo_oscars/1: Solicita um número mínimo de Oscars ganhos (ou 0 para sem restrição).
+% - validar_genero/1: Verifica se um gênero fornecido pelo usuário é válido com base nos dados do CSV.
 
 % Ano mínimo ou sem restrição (0)
 obter_valor_minimo_ano(MinAno) :-
@@ -91,6 +106,8 @@ validar_genero(Gen) :-
     maplist({}/[C]>>(char_type(C, alnum); char_type(C, space)), Chs).
 
 % -------------------- Montagem de Critérios --------------------
+% O predicado montar_criterios/6 cria uma lista de filtros com base nos critérios fornecidos pelo usuário.
+% Cada filtro é representado por um predicado que será aplicado aos filmes.
 
 montar_criterios(MinAno, MaxDur, Genres, MinRat, MinOsc, Crits) :-
     ( MinAno > 0 -> C1 = [filtrar_ano(MinAno)] ; C1 = [] ),
@@ -101,6 +118,13 @@ montar_criterios(MinAno, MaxDur, Genres, MinRat, MinOsc, Crits) :-
     append([C1,C2,C3,C4,C5], Crits).
 
 % -------------------- Predicados de Filtro --------------------
+% Estes predicados implementam os filtros usados para selecionar filmes:
+% - filtrar_ano/2: Filtra filmes com base no ano mínimo.
+% - filtrar_duracao/2: Filtra filmes com base na duração máxima.
+% - filtrar_rating_imdb/2: Filtra filmes com base no rating mínimo do IMDb.
+% - filtrar_oscar/2: Filtra filmes com base no número mínimo de Oscars ganhos.
+% - filtrar_multiplos_genero/2: Filtra filmes que contenham todos os gêneros escolhidos pelo usuário.
+% - filtrar_filmes/3: Aplica todos os filtros em sequência para obter a lista final de filmes.
 
 filtrar_ano(Min, movie(_,_,Ano,_,_,_,_))         :- Ano >= Min.
 filtrar_duracao(Max, movie(_,_,_,Dur,_,_,_))     :- Dur =< Max.
@@ -119,6 +143,12 @@ filtrar_filmes([F|Fs], In, Out) :-
     filtrar_filmes(Fs, Mid, Out).
 
 % -------------------- Paginação e Impressão --------------------
+% Esta seção lida com a exibição dos filmes filtrados:
+% - drop/3: Remove os primeiros N elementos de uma lista (usado para paginação).
+% - print_indexed/2: Imprime as informações de um filme numerado.
+% - exibir_index/4: Exibe até N filmes por página e retorna o restante.
+% - menu/3: Exibe opções para o usuário após cada página (mais filmes, nova busca ou sair).
+% - loop_filmes/2: Controla a exibição paginada dos filmes.
 
 % Remove os N primeiros elementos de uma lista
 drop(0, L, L) :- !.
@@ -173,6 +203,10 @@ loop_filmes(Fs, Page) :-
     menu(Fs, Page, Rem).
 
 % -------------------- Menu Inicial --------------------
+% O predicado initial_menu/0 exibe o menu principal do sistema:
+% - Opções disponíveis: nova busca, listar gêneros disponíveis ou sair.
+% - Cada opção chama o predicado correspondente (e.g., main_search/0 para nova busca).
+
 initial_menu :-
     writeln('Bem-vindo ao Movie Finder!'),
     writeln('Escolha uma opção:'),
@@ -189,6 +223,9 @@ initial_menu_option("3") :- writeln('Saindo...').
 initial_menu_option(_)   :- writeln('[!]Opção inválida.'), initial_menu.
 
 % -------------------- Ponto de Entrada --------------------
+% O predicado main/0 é o ponto de entrada do programa. Ele chama o menu inicial.
+% O predicado main_search/0 realiza uma busca completa, coletando critérios, filtrando filmes e exibindo os resultados.
+
 main :-
     initial_menu.
 
@@ -204,6 +241,8 @@ main_search :-
     loop_filmes(Filtered).
 
 % -------------------- Auxiliar de Gêneros --------------------
+% O predicado listar_generos/0 exibe todos os gêneros disponíveis no CSV, ordenados e sem duplicatas.
+% Ele também informa o número total de gêneros disponíveis.
 
 listar_generos :-
     carregar_filmes(Fs),
