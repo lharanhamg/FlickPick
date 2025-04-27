@@ -1,8 +1,11 @@
-# FlickPick
+# 🎬 FlickPick
 
 **FlickPick** é um sistema de recomendação de filmes desenvolvido em **Prolog**, para a cadeira de Lógica Aplicada à Programação da professora Tatiana Simões, referente ao período 2024.2 da UFPB.
 O objetivo do projeto é auxiliar usuários a encontrar filmes de seu interesse com base em filtros como ano de lançamento, duração, gênero, avaliação IMDb e número de Oscars.
-## Funcionamento do Código
+
+---
+
+## ⚙️ Funcionamento do Código
 
 O sistema carrega uma base de dados de filmes a partir de um arquivo CSV e permite que o usuário interaja de forma personalizada. Durante a execução, o usuário pode definir filtros como:
 
@@ -14,7 +17,9 @@ O sistema carrega uma base de dados de filmes a partir de um arquivo CSV e permi
 
 A partir desses filtros, o Prolog processa as informações e exibe uma lista de filmes que atendem aos critérios selecionados.
 
-## Como Usar
+---
+
+## ▶️ Como Usar
 
 1. Certifique-se de ter o **SWI-Prolog** instalado em sua máquina.
 
@@ -26,13 +31,18 @@ swipl -q -f recommender.pl
 
 3. Siga as instruções interativas para aplicar seus filtros e receber sugestões de filmes.
 
-## Tecnologias Utilizadas
+---
 
-- **Prolog (SWI-Prolog)**: Linguagem utilizada para implementar o sistema de recomendação baseado em regras lógicas.
-- **Jupyter Notebook**: Utilizado para a análise exploratória de dados (EDA) do conjunto de filmes, preparando o arquivo CSV para o sistema.
+## 🛠️ Tecnologias
 
-## Integrantes
+- **Prolog (SWI-Prolog)**: implementação da lógica de recomendação  
+- **CSV Library**: leitura e conversão de dados em fatos Prolog  
+- **Google Colab (Python)**: pré-processamento e EDA do dataset IMDB  
 
-- Miguel de Queiroz F. Soares
-- Luis Henrique A. Magalhães
-- Luigi Emanuel M. Schmitt
+---
+
+## 👥 Integrantes
+
+- Miguel de Queiroz F. Soares  
+- Luis Henrique A. Magalhães  
+- Luigi Emanuel M. Schmitt  
