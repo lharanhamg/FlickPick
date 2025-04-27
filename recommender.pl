@@ -1,9 +1,5 @@
 :- use_module(library(csv)).
 
-% -------------------- Comentários sobre o funcionamento do código --------------------
-% Este código implementa um sistema de recomendação de filmes em Prolog, utilizando um arquivo CSV como base de dados.
-% Abaixo está uma explicação detalhada de cada seção do código:
-
 % -------------------- Carregamento do CSV --------------------
 % O predicado carregar_filmes/1 lê os dados do arquivo 'data/movies.csv' e os transforma em uma lista de termos Prolog.
 % Cada linha do CSV é convertida em um termo movie(id, title, year, duration, genre, rating_imdb, oscar).
