@@ -51,7 +51,7 @@ all_zeros(S) :-
 % Gêneros (lista separada por vírgula) ou sem restrição (apenas 0 ou múltiplos zeros)
 obter_valor_genero(Genres) :-
     repeat,
-    writeln('Escolha um ou mais gêneros separados por vírgula (ex: Action,Comedy) ou 0 (sem restrição):'),
+    writeln('Escolha um ou mais gêneros separados por vírgula (ex: Action,Comedy) ou (0 = sem restrição):'),
     write('> '), flush_output,
     read_line_to_string(user_input, Input),
     ( all_zeros(Input)
@@ -146,7 +146,7 @@ filtrar_filmes([F|Fs], In, Out) :-
 % - menu/3: Exibe opções para o usuário após cada página (mais filmes, nova busca ou sair).
 % - loop_filmes/2: Controla a exibição paginada dos filmes.
 
-% Remove os N primeiros elementos de uma lista
+% Remove os N primeiros elementos da lista
 drop(0, L, L) :- !.
 drop(_, [], []) :- !.
 drop(N, [_|T], R) :- N > 0, N1 is N-1, drop(N1, T, R).
@@ -218,7 +218,7 @@ initial_menu_option("2") :- listar_generos, initial_menu.
 initial_menu_option("3") :- writeln('Saindo...').
 initial_menu_option(_)   :- writeln('[!]Opção inválida.'), initial_menu.
 
-% -------------------- Ponto de Entrada --------------------
+% -------------------- Main --------------------
 % O predicado main/0 é o ponto de entrada do programa. Ele chama o menu inicial.
 % O predicado main_search/0 realiza uma busca completa, coletando critérios, filtrando filmes e exibindo os resultados.
 
