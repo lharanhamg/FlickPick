@@ -1,4 +1,5 @@
 # 🎬 FlickPick
+### Indicador de filmes em prolog
 
 **FlickPick** é um sistema de recomendação de filmes desenvolvido em **Prolog**, para a cadeira de Lógica Aplicada à Programação da professora Tatiana Simões, referente ao período 2024.2 da UFPB.
 O objetivo do projeto é auxiliar usuários a encontrar filmes de seu interesse com base em filtros como ano de lançamento, duração, gênero, avaliação IMDb e número de Oscars.
@@ -29,7 +30,13 @@ A partir desses filtros, o Prolog processa as informações e exibe uma lista de
 swipl -q -f recommender.pl
 ```
 
-3. Siga as instruções interativas para aplicar seus filtros e receber sugestões de filmes.
+3. Para rodar o programa, execute:
+
+```bash
+?- main.
+```
+
+4. Siga as instruções interativas para aplicar seus filtros e receber sugestões de filmes.
 
 ---
 
